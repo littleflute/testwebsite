@@ -3,9 +3,28 @@
  */
 package test1;
 
+
+import retrofit2.*;
+import java.util.List;
+import java.io.IOException;
+import com.google.gson.JsonElement;
+import okhttp3.ResponseBody;
+
 public class App {
     public String getGreeting() {
-        return "Hello world.";
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.github.com/").build();
+
+		GitHubService service = retrofit.create(GitHubService.class);
+		String greeting;
+		try {
+			Call<ResponseBody> greetingCall = service.listRepos("octocat");
+			Response<ResponseBody> greetingResponse = greetingCall.execute();
+			greeting = greetingResponse.body().string();
+		} catch (IOException e) {
+			greeting = "Help! Error";
+		}
+
+        return greeting;
     }
 
     public static void main(String[] args) {
