@@ -1,1 +1,10 @@
-ECHO is on.
+git mv foo bar
+git commit -n
+SAVED=`git rev-parse HEAD`
+git reset --hard HEAD^
+git mv foo foo-magic
+git commit -n
+git merge $SAVED # This will generate conflicts
+git commit -a -n # Trivially resolved like this
+git mv foo-magic foo
+git commit -n
