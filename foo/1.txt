@@ -8,3 +8,6 @@ git merge $SAVED # This will generate conflicts
 git commit -a -n # Trivially resolved like this
 git mv foo-magic foo
 git commit -n
+
+ref:
+https://stackoverflow.com/questions/16937359/git-copy-file-preserving-history
