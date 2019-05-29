@@ -5,7 +5,7 @@ package xdJava1;
 
 public class App {
     public String getGreeting() {
-        return "Hello world.";
+        return "Hello prj1.";
     }
 
     public static void main(String[] args) {
