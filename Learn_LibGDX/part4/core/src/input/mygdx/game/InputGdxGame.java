@@ -12,7 +12,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class InputGdxGame implements ApplicationListener, InputProcessor{
+import com.badlogic.gdx.math.Vector2;
+
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
+
+public class InputGdxGame implements ApplicationListener, GestureListener{
 	SpriteBatch batch;
 
 	private BitmapFont font;
@@ -50,11 +55,6 @@ public class InputGdxGame implements ApplicationListener, InputProcessor{
 		texture = new Texture("badlogic.jpg");
 		sprite = new Sprite(texture);
 		sprite.setPosition(w/2 -sprite.getWidth()/2, h/2 - sprite.getHeight()/2);
-
-		Gdx.input.setInputProcessor(this);
-		for(int i = 0; i < 5; i++){
-			touches.put(i, new TouchInfo());
-		}
 	}
 
 	@Override
@@ -79,22 +79,9 @@ public class InputGdxGame implements ApplicationListener, InputProcessor{
 		batch.begin();
 		sprite.draw(batch);
 
-		message = "xdmsg";
-		for(int i = 0; i < 5; i++){
-			if(touches.get(i).touched)
-				message += "Finger:" + Integer.toString(i) + "touch at:" +
-						Float.toString(touches.get(i).touchX) +
-						"," +
-						Float.toString(touches.get(i).touchY) +
-						"\n";
+		//message = "xdmsg";
 
-		}
-		//float tb = font.getBounds(message);
-		float x = w/2 ;//- tb.width/2;
-		float y = h/2 ;//+ tb.height/2;
-		//font.drawMultiLine(batch, message, x, y);
-
-		font.draw(batch, message, touches.get(0).touchX,touches.get(0).touchY);//200, 200);
+		font.draw(batch, message, 200, 200);
 
 		batch.end();
 	}
@@ -118,58 +105,60 @@ public class InputGdxGame implements ApplicationListener, InputProcessor{
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public void pinchStop(){
 
-	@Override
-	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
 	}
-
 	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean panStop(float x,
+						   float y,
+						   int pointer,
+						   int button){
+		return true;
 	}
-
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(pointer < 5){
-			touches.get(pointer).touchX = screenX;
-			touches.get(pointer).touchY = screenY;
-			touches.get(pointer).touched = true;
-		}
+	public boolean touchDown(float x,
+							 float y,
+							 int pointer,
+							 int button){
+		return true;
+	}
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		message = "Tap performed, finger" + Integer.toString(button);
 		return true;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if(pointer < 5){
-			touches.get(pointer).touchX = 0;
-			touches.get(pointer).touchY = 0;
-			touches.get(pointer).touched = false;
-		}
+	public boolean longPress(float x, float y) {
+		message = "Long press performed";
 		return true;
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean fling(float velocityX, float velocityY, int button) {
+		message = "Fling performed, velocity:" + Float.toString(velocityX) +
+				"," + Float.toString(velocityY);
+		return true;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		message = "Pan performed, delta:" + Float.toString(deltaX) +
+				"," + Float.toString(deltaY);
+		return true;
 	}
 
 	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean zoom(float initialDistance, float distance) {
+		message = "Zoom performed, initial Distance:" + Float.toString(initialDistance) +
+				" Distance: " + Float.toString(distance);
+		return true;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
+						 Vector2 pointer1, Vector2 pointer2) {
+		message = "Pinch performed";
+		return true;
 	}
 }
