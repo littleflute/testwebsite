@@ -42,7 +42,10 @@ public class InputGdxGame implements ApplicationListener, GestureListener{
 
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
-		batch = new SpriteBatch();
+
+
+        GestureDetector gd = new GestureDetector(this);
+        Gdx.input.setInputProcessor(gd);
 
 
 		//font = new BitmapFont(Gdx.files.internal("data/arial-15.fnt"),false);
@@ -59,7 +62,7 @@ public class InputGdxGame implements ApplicationListener, GestureListener{
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
