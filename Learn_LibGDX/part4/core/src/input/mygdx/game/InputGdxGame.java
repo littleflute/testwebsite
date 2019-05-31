@@ -225,3 +225,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 		return false;
 	}
 }
+/*
+git log --oneline --decorate --graph --all
+ */
