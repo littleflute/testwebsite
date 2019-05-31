@@ -1,11 +1,6 @@
 package input.mygdx.game;
-<<<<<<< HEAD
-
-import com.badlogic.gdx.ApplicationAdapter;
-=======
 import java.util.HashMap;
 import java.util.Map;
->>>>>>> part5demo3
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
@@ -13,27 +8,18 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input;
-
-import com.badlogic.gdx.Input.Buttons;
-
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-<<<<<<< HEAD
-public class InputGdxGame implements ApplicationListener,InputProcessor{
-=======
 import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 
 public class InputGdxGame implements ApplicationListener, GestureListener, InputProcessor{
->>>>>>> part5demo3
 	SpriteBatch batch;
 
 	private BitmapFont font;
@@ -41,9 +27,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 	private Texture texture;
 	private Sprite sprite;
 
-<<<<<<< HEAD
-	private float posX, posY;
-=======
 	private int w,h;
 
 	private String message = "Touch something already!";
@@ -54,7 +37,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 		public boolean touched = false;
 	}
 	private Map<Integer,TouchInfo> touches = new HashMap<Integer,TouchInfo>();
->>>>>>> part5demo3
 
 	@Override
 	public void create () {
@@ -100,14 +82,7 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 			else
 				sprite.translateX(10.0f);
 		}
-		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-			sprite.setPosition(Gdx.input.getX() - sprite.getWidth()/2,
-					Gdx.graphics.getHeight() - Gdx.input.getY() - sprite.getHeight()/2);
-		}
-		if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-			sprite.setPosition(Gdx.graphics.getWidth()/2 -sprite.getWidth()/2,
-					Gdx.graphics.getHeight()/2 - sprite.getHeight()/2);
-		}
+
 		batch.begin();
 		sprite.draw(batch);
 
@@ -117,7 +92,7 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 
 		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -137,17 +112,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 	}
 
 	@Override
-<<<<<<< HEAD
-	public boolean keyDown(int keycode) {
-		float moveAmount = 1.0f;
-		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
-			moveAmount = 10.0f;
-
-		if(keycode == Keys.LEFT)
-			posX-=moveAmount;
-		if(keycode == Keys.RIGHT)
-			posX+=moveAmount;
-=======
 	public void pinchStop(){
 
 	}
@@ -168,37 +132,10 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		message = "Tap performed, finger" + Integer.toString(button);
->>>>>>> part5demo3
 		return true;
 	}
 
 	@Override
-<<<<<<< HEAD
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button == Buttons.LEFT){
-			posX = screenX - sprite.getWidth()/2;
-			posY = Gdx.graphics.getHeight() - screenY - sprite.getHeight()/2;
-		}
-		if(button == Buttons.RIGHT){
-			posX = Gdx.graphics.getWidth()/2 - sprite.getWidth()/2;
-			posY = Gdx.graphics.getHeight()/2 - sprite.getHeight()/2;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-=======
 	public boolean longPress(float x, float y) {
 		message = "Long press performed";
 		return true;
@@ -266,24 +203,11 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		message = "Touch up";
 		Gdx.app.log("INFO", message);
->>>>>>> part5demo3
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-<<<<<<< HEAD
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-=======
 		message = "Touch Dragged";
 		Gdx.app.log("INFO", message);
 		return false;
@@ -298,7 +222,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener, Input
 	public boolean scrolled(int amount) {
 		message = "Scrolled";
 		Gdx.app.log("INFO", message);
->>>>>>> part5demo3
 		return false;
 	}
 }
