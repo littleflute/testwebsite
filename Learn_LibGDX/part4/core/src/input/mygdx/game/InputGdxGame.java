@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input;
@@ -17,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 
-public class InputGdxGame implements ApplicationListener, GestureListener{
+public class InputGdxGame implements ApplicationListener, GestureListener, InputProcessor{
 	SpriteBatch batch;
 
 	private BitmapFont font;
@@ -43,14 +45,6 @@ public class InputGdxGame implements ApplicationListener, GestureListener{
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
-
-        GestureDetector gd = new GestureDetector(this);
-        Gdx.input.setInputProcessor(gd);
-
-
-		//font = new BitmapFont(Gdx.files.internal("data/arial-15.fnt"),false);
-		//font.setColor(Color.RED);
-
 		font = new BitmapFont();
 		font.setColor(Color.BLUE);
 
@@ -58,6 +52,16 @@ public class InputGdxGame implements ApplicationListener, GestureListener{
 		texture = new Texture("badlogic.jpg");
 		sprite = new Sprite(texture);
 		sprite.setPosition(w/2 -sprite.getWidth()/2, h/2 - sprite.getHeight()/2);
+
+
+
+		InputMultiplexer im = new InputMultiplexer();
+		GestureDetector gd = new GestureDetector(this);
+		im.addProcessor(gd);
+		im.addProcessor(this);
+
+
+		Gdx.input.setInputProcessor(im);
 	}
 
 	@Override
@@ -163,5 +167,61 @@ public class InputGdxGame implements ApplicationListener, GestureListener{
 						 Vector2 pointer1, Vector2 pointer2) {
 		message = "Pinch performed";
 		return true;
+	}
+
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		message = "Touch Down";
+		Gdx.app.log("INFO", message);
+
+		return false;
+	}
+
+
+	@Override
+	public boolean keyDown(int keycode) {
+		message = "Key Down";
+		Gdx.app.log("INFO", message);
+		return true;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		message = "Key up";
+		Gdx.app.log("INFO", message);
+		return true;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		message = "Key typed";
+		Gdx.app.log("INFO", message);
+		return true;
+	}
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		message = "Touch up";
+		Gdx.app.log("INFO", message);
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		message = "Touch Dragged";
+		Gdx.app.log("INFO", message);
+		return false;
+	}
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		message = "Mouse moved";
+		Gdx.app.log("INFO", message);
+		return false;
+	}
+	@Override
+	public boolean scrolled(int amount) {
+		message = "Scrolled";
+		Gdx.app.log("INFO", message);
+		return false;
 	}
 }
