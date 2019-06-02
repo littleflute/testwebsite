@@ -18,13 +18,15 @@ public class InputGdxGame extends ApplicationAdapter {
 	private Texture texture;
 	private Sprite sprite;
 
+	int b[] = {0,1,2,3,4,5,6,7,8};
+	int a[] = {0,1,2,3,4,5,6,7,8};
 	private float xdD = 120.0f;
 	private float xdX = 120.0f;
 	private float xdY = 120.0f;
 	private float w = 0;
 	private float h = 0;
 	private BitmapFont font;
-	private String xdStrV = "v0.0.4: ";
+	private String xdStrV = "v0.0.5: " + xdStart();
 	private String xdMsg = xdStrV;
 
 	private ArrayList<Texture> Ts = new ArrayList<Texture>();
@@ -93,6 +95,24 @@ public class InputGdxGame extends ApplicationAdapter {
 		}
 		return r;
 	}
+	private String xdStart(){
+//        double r= Math.random();
+		String s = "b[]:";
+		for(int i=0;i<b.length;i++){
+			int n = (int)( Math.random()*11100);
+			n%=9;
+			while(a[n]==-1){
+				n++;
+				if(n>8) n=0;
+			}
+			b[i]=n;
+			a[n]=-1;
+		}
+		for(int i=0;i<b.length;i++){
+			s +=b[i] + "::";
+		}
+        return s;
+    }
 	private void xdF1(ArrayList<Sprite> sl){
 		for (int i = 0; i < sl.size(); i++) {
 			sl.get(i).draw(batch);
@@ -142,8 +162,9 @@ public class InputGdxGame extends ApplicationAdapter {
 		Ss.add(new Sprite(Ts.get(8)));
 
 
+
 		for(int i=0;i<Ss.size();i++){
-			xdSetxy(Ss.get(i),xdX+xdD*(i%3),xdY+xdD*(i/3));
+			xdSetxy(Ss.get(b[i]),xdX+xdD*(i%3),xdY+xdD*(i/3));
 		}
 	}
 
