@@ -24,7 +24,7 @@ public class InputGdxGame extends ApplicationAdapter {
 	private float w = 0;
 	private float h = 0;
 	private BitmapFont font;
-	private String xdStrV = "v0.0.3: ";
+	private String xdStrV = "v0.0.4: ";
 	private String xdMsg = xdStrV;
 
 	private ArrayList<Texture> Ts = new ArrayList<Texture>();
@@ -44,9 +44,23 @@ public class InputGdxGame extends ApplicationAdapter {
 	}
 	private void xdHit(int iBox){
 
-		int i = xdGetSpriteNoByBoxNo(iBox);
-		xdMsg = "box:" + iBox + " i:" + i;
-		xdSwap(Ss,i,8);
+		int iSprite = xdGetSpriteNoByBoxNo(iBox);
+		int i8InBox = xdGetBoxNoBySpriteNo(8);
+
+		xdMsg = "box:" + iBox + " iSprite:" + iSprite + "i8InBox:"+i8InBox;
+		if(iBox-i8InBox==3 || -3==iBox-i8InBox ||
+				(iBox/3==i8InBox/3)&&(  iBox-i8InBox==1 || -1==iBox-i8InBox)
+		){
+			xdSwap(Ss,iSprite,8);
+		}
+	//	xdSwap(Ss,i,8);
+	}
+	private int xdGetBoxNoBySpriteNo(int iSprite){
+		float x = Ss.get(iSprite).getX()+xdD/2;
+		float y = h - Ss.get(iSprite).getY()-xdD/2;
+		int iBox = -1;
+		iBox = xdGetBoxNoByXY(x,y);
+		return iBox;
 	}
 	private int xdGetSpriteNoByBoxNo(int iBox){
 		int iRet = -1;
@@ -72,7 +86,7 @@ public class InputGdxGame extends ApplicationAdapter {
 
 		if((i>=0&&i<=2)&&(j>=0&&j<=2)){
 			r = j*3 + i;
-			xdHit(r);
+
 		}
 		else{
 			//xdSwap(Ss,2,3);
@@ -88,6 +102,7 @@ public class InputGdxGame extends ApplicationAdapter {
 	}
 	private void xdF2(ArrayList<Sprite> sl,float x,float y){
 		int i = xdGetBoxNoByXY(x,y);
+		if(-1!=i) xdHit(i);
 	}
 
 	@Override
