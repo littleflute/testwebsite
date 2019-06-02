@@ -24,7 +24,7 @@ public class InputGdxGame extends ApplicationAdapter {
 	private float w = 0;
 	private float h = 0;
 	private BitmapFont font;
-	private String xdStrV = "v0.0.2: ";
+	private String xdStrV = "v0.0.3: ";
 	private String xdMsg = xdStrV;
 
 	private ArrayList<Texture> Ts = new ArrayList<Texture>();
@@ -44,34 +44,38 @@ public class InputGdxGame extends ApplicationAdapter {
 	}
 	private void xdHit(int iBox){
 
-		String i = xdGetSpriteNoByBoxNo(iBox);
+		int i = xdGetSpriteNoByBoxNo(iBox);
 		xdMsg = "box:" + iBox + " i:" + i;
+		xdSwap(Ss,i,8);
 	}
-	private String xdGetSpriteNoByBoxNo(int iBox){
-		String s = "spriteNo:";
+	private int xdGetSpriteNoByBoxNo(int iBox){
+		int iRet = -1;
 		for(int i=0;i<Ss.size();i++){
-			int ii = (int)((Ss.get(i).getX()-xdX/2)/xdD);
-			int jj = (int)((Ss.get(i).getY()-xdY/2)/xdD);
+			float x = Ss.get(i).getX() + xdD/2;
+			float y = h - Ss.get(i).getY() -xdD/2;
+
+			int ii = (int)((x-xdX+xdD/2)/xdD);
+			int jj = (int)((y-xdY+xdD/2)/xdD);
 			if(iBox==(jj*3+ii))
 			{
-				s+=i;
+				iRet = i;
 			}
 		}
 
-		return s;
+		return iRet;
 	}
 	private int xdGetBoxNoByXY(float x,float y){
 		int r = -1;
-		int i = (int)((x-xdX/2)/xdD);
+		int i = (int)((x-xdX+xdD/2)/xdD);
 
-		int j = (int)((y-xdY/2)/xdD);
+		int j = (int)((y-xdY+xdD/2)/xdD);
 
 		if((i>=0&&i<=2)&&(j>=0&&j<=2)){
 			r = j*3 + i;
 			xdHit(r);
 		}
 		else{
-			xdSwap(Ss,2,3);
+			//xdSwap(Ss,2,3);
 		}
 		return r;
 	}
