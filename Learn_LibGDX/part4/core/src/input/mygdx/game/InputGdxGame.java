@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class InputGdxGame implements ApplicationListener{
 	public class MyActor extends Actor {
-		Texture texture = new Texture(Gdx.files.internal("badlogic.jpg"));
+		Texture texture = new Texture(Gdx.files.internal("data/jet.png"));
 		@Override
 		public void draw(Batch batch, float alpha){
 			batch.draw(texture,0,0);
