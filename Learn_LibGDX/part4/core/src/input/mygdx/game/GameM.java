@@ -88,9 +88,38 @@ public class GameM {
         for (int i = 0; i < sl.size(); i++) {
             sl.get(i).draw(sb);
         }
+        String s = "";
+        if((xdGetSpriteNoByBoxNo(sl,0)==0)
+        &&(xdGetSpriteNoByBoxNo(sl,1)==1)
+        &&(xdGetSpriteNoByBoxNo(sl,2)==2)
+        &&(xdGetSpriteNoByBoxNo(sl,3)==3)
+        &&(xdGetSpriteNoByBoxNo(sl,4)==4)
+        &&(xdGetSpriteNoByBoxNo(sl,5)==5)
+        &&(xdGetSpriteNoByBoxNo(sl,6)==6)
+          &&(xdGetSpriteNoByBoxNo(sl,7)==7)){
+            s += "You Win!";
+        }
         BitmapFont f = new BitmapFont();
 
         f.setColor(Color.GREEN);
-        f.draw(sb,"GameM:v0.0.3",500,400);
+        f.draw(sb,"GameM:v0.1.0 \n" + s,500,400);
     }
+
+    public int xdGetSpriteNoByBoxNo(ArrayList<Sprite>Ss,int iBox){
+        int iRet = -1;
+        for(int i=0;i<Ss.size();i++){
+            float x = Ss.get(i).getX() + xdD/2;
+            float y = Gdx.graphics.getHeight() - Ss.get(i).getY() -xdD/2;
+
+            int ii = (int)((x-xdX+xdD/2)/xdD);
+            int jj = (int)((y-xdY+xdD/2)/xdD);
+            if(iBox==(jj*3+ii))
+            {
+                iRet = i;
+            }
+        }
+
+        return iRet;
+    }
+
 }

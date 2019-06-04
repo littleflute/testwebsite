@@ -34,7 +34,7 @@ public class InputGdxGame extends ApplicationAdapter {
 
 	private void xdHit(ArrayList<Sprite> sl,int iBox){
 
-		int iSprite = xdGetSpriteNoByBoxNo(iBox);
+		int iSprite = gm.xdGetSpriteNoByBoxNo(sl,iBox);
 		int i8InBox = xdGetBoxNoBySpriteNo(8);
 
 		xdMsg = "box:" + iBox + " iSprite:" + iSprite + "i8InBox:"+i8InBox;
@@ -51,23 +51,6 @@ public class InputGdxGame extends ApplicationAdapter {
 		iBox = gm.xdGetBoxNoByXY(x,y,xdX,xdY,xdD);
 		return iBox;
 	}
-	private int xdGetSpriteNoByBoxNo(int iBox){
-		int iRet = -1;
-		for(int i=0;i<Ss.size();i++){
-			float x = Ss.get(i).getX() + xdD/2;
-			float y = h - Ss.get(i).getY() -xdD/2;
-
-			int ii = (int)((x-xdX+xdD/2)/xdD);
-			int jj = (int)((y-xdY+xdD/2)/xdD);
-			if(iBox==(jj*3+ii))
-			{
-				iRet = i;
-			}
-		}
-
-		return iRet;
-	}
-
 
 	private void xdF2(ArrayList<Sprite> sl,float x,float y){
 		int i = gm.xdGetBoxNoByXY(x,y,xdX,xdY,xdD);
