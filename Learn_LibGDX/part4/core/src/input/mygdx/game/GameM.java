@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+
+
 import java.util.ArrayList;
 
 public class GameM {
@@ -98,11 +100,13 @@ public class GameM {
         &&(xdGetSpriteNoByBoxNo(sl,6)==6)
           &&(xdGetSpriteNoByBoxNo(sl,7)==7)){
             s += "You Win!";
+
+
         }
         BitmapFont f = new BitmapFont();
 
         f.setColor(Color.GREEN);
-        f.draw(sb,"GameM:v0.1.0 \n" + s,500,400);
+        f.draw(sb,"GameM:v0.1.1 \n try audio failed!" + s,500,400);
     }
 
     public int xdGetSpriteNoByBoxNo(ArrayList<Sprite>Ss,int iBox){
