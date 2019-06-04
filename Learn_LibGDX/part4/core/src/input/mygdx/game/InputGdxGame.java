@@ -44,6 +44,7 @@ public class InputGdxGame implements ApplicationListener{
 
 	@Override
 	public void create () {
+		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
 		MyActor myActor = new MyActor();
