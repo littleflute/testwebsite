@@ -1,6 +1,6 @@
 package input.mygdx.game;
 
-//import com.badlogic.gdx.audio;
+import com.badlogic.gdx.audio.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -19,6 +19,8 @@ public class InputGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 
 	GameM gm = new GameM();
+
+	Sound wavSound;
 
 	private float xdD = 120.0f;
 	private float xdX = 120.0f;
@@ -44,6 +46,8 @@ public class InputGdxGame extends ApplicationAdapter {
 				(iBox/3==i8InBox/3)&&(  iBox-i8InBox==1 || -1==iBox-i8InBox)
 		){
 			gm.xdSwap(sl,iSprite,8);
+			wavSound.play();
+
 		}
 	}
 	private int xdGetBoxNoBySpriteNo(int iSprite){
@@ -65,6 +69,7 @@ public class InputGdxGame extends ApplicationAdapter {
 
 		xdFont = new BitmapFont();
 		xdFont.setColor(Color.RED);
+		wavSound = Gdx.audio.newSound(Gdx.files.internal("data/APiano.wav"));
 
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
@@ -92,6 +97,7 @@ public class InputGdxGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		wavSound.dispose();
 
 		for(int i=0;i<Ts.size();i++){
 			Ts.get(i).dispose();
