@@ -19,6 +19,9 @@ public class InputGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 
 	GameM gm = new GameM();
+	myJSON js = new myJSON();
+
+
 
 	Sound wavSound;
 
@@ -75,6 +78,7 @@ public class InputGdxGame extends ApplicationAdapter {
 		h = Gdx.graphics.getHeight();
 
 		gm.pbInit(Ss,Ts);
+		js.test();
 	}
 
 	@Override
@@ -90,6 +94,7 @@ public class InputGdxGame extends ApplicationAdapter {
 		batch.begin();
 		xdFont.draw(batch, xdMsg, 450, 300);
 		gm.pbDraw(batch,Ss);
+		js.pbDraw(batch);
 
 		batch.end();
 	}
