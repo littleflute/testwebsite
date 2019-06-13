@@ -1,111 +1,143 @@
 package input.mygdx.game;
-
-import com.badlogic.gdx.audio.*;
+import java.util.Iterator;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
-import java.util.ArrayList;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class InputGdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
+	private Texture dropImage;
+	private Texture bucketImage;
+	private Sound dropSound;
+	private Music rainMusic;
+	private SpriteBatch batch;
+	private OrthographicCamera camera;
+	private Rectangle bucket;
+	private Array<Rectangle> raindrops;
+	private long lastDropTime;
 
-	GameM gm = new GameM();
-	myJSON js = new myJSON();
-
-
-
-	Sound wavSound;
-
-	private float xdD = 120.0f;
-	private float xdX = 120.0f;
-	private float xdY = 120.0f;
-	private float w = 0;
-	private float h = 0;
-	private BitmapFont xdFont;
-	private String xdStrV = "v0.0.12: " ;
-	private String xdMsg = xdStrV;
-
-	private ArrayList<Texture> Ts = new ArrayList<Texture>();
-	private ArrayList<Sprite> Ss = new ArrayList<Sprite>();
-
-
-
-	private void xdHit(ArrayList<Sprite> sl,int iBox){
-
-		int iSprite = gm.xdGetSpriteNoByBoxNo(sl,iBox);
-		int i8InBox = xdGetBoxNoBySpriteNo(8);
-
-		xdMsg = "box:" + iBox + " iSprite:" + iSprite + "i8InBox:"+i8InBox;
-		if(iBox-i8InBox==3 || -3==iBox-i8InBox ||
-				(iBox/3==i8InBox/3)&&(  iBox-i8InBox==1 || -1==iBox-i8InBox)
-		){
-			gm.xdSwap(sl,iSprite,8);
-			wavSound.play();
-
-		}
-	}
-	private int xdGetBoxNoBySpriteNo(int iSprite){
-		float x = Ss.get(iSprite).getX()+xdD/2;
-		float y = h - Ss.get(iSprite).getY()-xdD/2;
-		int iBox = -1;
-		iBox = gm.xdGetBoxNoByXY(x,y,xdX,xdY,xdD);
-		return iBox;
-	}
-
-	private void xdF2(ArrayList<Sprite> sl,float x,float y){
-		int i = gm.xdGetBoxNoByXY(x,y,xdX,xdY,xdD);
-		if(-1!=i) xdHit(sl,i);
-	}
+	private GameM gm;
+	private int score;
 
 	@Override
-	public void create () {
+	public void create() {
+		score = 0;
+		gm = new GameM();
+		// load the images for the droplet and the bucket, 64x64 pixels each
+		dropImage = new Texture(Gdx.files.internal("droplet.png"));
+		bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+
+		// load the drop sound effect and the rain background "music"
+		dropSound = Gdx.audio.newSound(Gdx.files.internal("data/raindrop.mp3"));
+		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("data/raining.mp3"));
+
+		// start the playback of the background music immediately
+		rainMusic.setLooping(true);
+		rainMusic.play();
+
+		// create the camera and the SpriteBatch
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 
-		xdFont = new BitmapFont();
-		xdFont.setColor(Color.RED);
-		wavSound = Gdx.audio.newSound(Gdx.files.internal("data/APiano.wav"));
+		// create a Rectangle to logically represent the bucket
+		bucket = new Rectangle();
+		bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
+		bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
+		bucket.width = 64;
+		bucket.height = 64;
 
-		w = Gdx.graphics.getWidth();
-		h = Gdx.graphics.getHeight();
+		// create the raindrops array and spawn the first raindrop
+		raindrops = new Array<Rectangle>();
+		spawnRaindrop();
+	}
 
-		gm.pbInit(Ss,Ts);
-		js.test();
+	private void spawnRaindrop() {
+		Rectangle raindrop = new Rectangle();
+		raindrop.x = MathUtils.random(0, 800-64);
+		raindrop.y = 480;
+		raindrop.width = 64;
+		raindrop.height = 64;
+		raindrops.add(raindrop);
+		lastDropTime = TimeUtils.nanoTime();
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+	public void render() {
+		// clear the screen with a dark blue color. The
+		// arguments to glClearColor are the red, green
+		// blue and alpha component in the range [0,1]
+		// of the color to be used to clear the screen.
+		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		// tell the camera to update its matrices.
+		camera.update();
 
-		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-			xdF2(Ss,Gdx.input.getX(),Gdx.input.getY());
+		// tell the SpriteBatch to render in the
+		// coordinate system specified by the camera.
+		batch.setProjectionMatrix(camera.combined);
 
-		}
+		// begin a new batch and draw the bucket and
+		// all drops
 		batch.begin();
-		xdFont.draw(batch, xdMsg, 450, 300);
-		gm.pbDraw(batch,Ss);
-		js.pbDraw(batch);
-
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		wavSound.dispose();
-
-		for(int i=0;i<Ts.size();i++){
-			Ts.get(i).dispose();
+		batch.draw(bucketImage, bucket.x, bucket.y);
+		for(Rectangle raindrop: raindrops) {
+			batch.draw(dropImage, raindrop.x, raindrop.y);
 		}
+		gm.pbDrawVer(batch,score);
+		batch.end();
+
+		// process user input
+		if(Gdx.input.isTouched()) {
+			Vector3 touchPos = new Vector3();
+			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(touchPos);
+			bucket.x = touchPos.x - 64 / 2;
+		}
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
+
+		// make sure the bucket stays within the screen bounds
+		if(bucket.x < 0) bucket.x = 0;
+		if(bucket.x > 800 - 64) bucket.x = 800 - 64;
+
+		// check if we need to create a new raindrop
+		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+
+		// move the raindrops, remove any that are beneath the bottom edge of
+		// the screen or that hit the bucket. In the latter case we play back
+		// a sound effect as well.
+		for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
+			Rectangle raindrop = iter.next();
+			raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
+			if(raindrop.y + 64 < 0) iter.remove();
+			if(raindrop.overlaps(bucket)) {
+				dropSound.play();
+				score++;
+				iter.remove();
+			}
+		}
+	}
+
+	@Override
+	public void dispose() {
+		// dispose of all the native resources
+		dropImage.dispose();
+		bucketImage.dispose();
+		dropSound.dispose();
+		rainMusic.dispose();
+		batch.dispose();
 	}
 }

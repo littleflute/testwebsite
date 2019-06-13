@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class GameM {
 
+    BitmapFont mBF = new BitmapFont();
     int B[] = {0,1,2,3,4,5,6,7,8};
     int A[] = {0,1,2,3,4,5,6,7,8};
 
@@ -85,6 +86,12 @@ public class GameM {
             r = j*3 + i;
         }
         return r;
+    }
+    public void pbDrawVer(SpriteBatch sb,int sc){
+
+        mBF.setColor(Color.RED);
+        mBF.draw(sb,"pbDrawVer:v0.0.1: sc=" + sc ,500,400);
+
     }
     public void pbDraw(SpriteBatch sb, ArrayList<Sprite> sl){
         for (int i = 0; i < sl.size(); i++) {
