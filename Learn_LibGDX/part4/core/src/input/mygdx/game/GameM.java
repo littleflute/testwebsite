@@ -10,9 +10,45 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 public class GameM {
+    class jsTest {
+        public void runDisplay() {
+            try {
+                ScriptEngineManager manager = new ScriptEngineManager();
+                ScriptEngine engine = manager.getEngineByName("JavaScript");
+                System.out.println("okay1");
+               // FileInputStream fileInputStream = new FileInputStream("C:/Users/Kushan/eclipse-workspace/sureson.lk/src/main/webapp/js/back_end_response.js");
+                System.out.println("okay2");
+                if (true){//fileInputStream != null){
+                   // BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
+                    engine.eval("var a=1;function ftn1(i){var x=17809; var r = x+i+',test'; return r;};");
+                    System.out.println("okay3");
+                    // Invocable javascriptEngine = null;
+                    System.out.println("okay4");
+                    Invocable invocableEngine = (Invocable)engine;
+                    System.out.println("okay5");
+                    int x=1;
+                    System.out.println("invocableEngine is : "+invocableEngine);
+                    Object result = invocableEngine.invokeFunction("ftn1",x);
+                    System.out.println(result + " x=" + x);
 
+                    System.out.println("okay6");
+                }
+            }catch(Exception e) {
+                System.out.println("erroe when calling js function"+ e);
+            }
+        }
+    }
+
+    jsTest jst = new jsTest();
     BitmapFont mBF = new BitmapFont();
     int B[] = {0,1,2,3,4,5,6,7,8};
     int A[] = {0,1,2,3,4,5,6,7,8};
@@ -21,116 +57,12 @@ public class GameM {
     private float xdX = 120.0f;
     private float xdY = 120.0f;
 
-    public void pbInit(ArrayList<Sprite>Ss,ArrayList<Texture> Ts){
-
-        Ts.add(new Texture("1.jpg"));
-        Ss.add(new Sprite(Ts.get(0)));
-        Ts.add(new Texture("2.jpg"));
-        Ss.add(new Sprite(Ts.get(1)));
-        Ts.add(new Texture("3.jpg"));
-        Ss.add(new Sprite(Ts.get(2)));
-
-        Ts.add(new Texture("4.jpg"));
-        Ss.add(new Sprite(Ts.get(3)));
-        Ts.add(new Texture("5.jpg"));
-        Ss.add(new Sprite(Ts.get(4)));
-        Ts.add(new Texture("6.jpg"));
-        Ss.add(new Sprite(Ts.get(5)));
-        Ts.add(new Texture("7.jpg"));
-        Ss.add(new Sprite(Ts.get(6)));
-        Ts.add(new Texture("8.jpg"));
-        Ss.add(new Sprite(Ts.get(7)));
-        Ts.add(new Texture("9.jpg"));
-        Ss.add(new Sprite(Ts.get(8)));
-        xdStart(A,B);
-        for(int i=0;i<Ss.size();i++){
-            xdSetxy(Ss.get(B[i]),xdX+xdD*(i%3),xdY+xdD*(i/3), Gdx.graphics.getHeight());
-        }
-    }
-    public void xdSwap(ArrayList<Sprite> sl,int i,int j){
-        float xI = sl.get(i).getX();
-        float yI = sl.get(i).getY();
-        float xJ = sl.get(j).getX();
-        float yJ = sl.get(j).getY();
-        sl.get(i).setPosition(xJ,yJ);
-        sl.get(j).setPosition(xI,yI);
-
-    }
-    public void xdSetxy(Sprite s,float x,float y,float h){
-        s.setPosition(x-s.getWidth()/2,h-y-s.getHeight()/2);
-    }
-    public String xdStart(int a[],int b[]){
-        String s = "b[]:";
-        for(int i=0;i<b.length;i++){
-            int n = (int)( Math.random()*11100);
-            n%=9;
-            while(a[n]==-1){
-                n++;
-                if(n>8) n=0;
-            }
-            b[i]=n;
-            a[n]=-1;
-        }
-        for(int i=0;i<b.length;i++){
-            s +=b[i] + "::";
-        }
-        return s;
-    }
-    public int xdGetBoxNoByXY(float x,float y,float x0,float y0,float d){
-        int r = -1;
-        int i = (int)((x-x0+d/2)/d);
-
-        int j = (int)((y-y0+d/2)/d);
-
-        if((i>=0&&i<=2)&&(j>=0&&j<=2)){
-            r = j*3 + i;
-        }
-        return r;
-    }
     public void pbDrawVer(SpriteBatch sb,int sc){
 
+        jst.runDisplay();
         mBF.setColor(Color.RED);
         mBF.draw(sb,"pbDrawVer:v0.0.1: sc=" + sc ,500,400);
 
-    }
-    public void pbDraw(SpriteBatch sb, ArrayList<Sprite> sl){
-        for (int i = 0; i < sl.size(); i++) {
-            sl.get(i).draw(sb);
-        }
-        String s = "";
-        if((xdGetSpriteNoByBoxNo(sl,0)==0)
-        &&(xdGetSpriteNoByBoxNo(sl,1)==1)
-        &&(xdGetSpriteNoByBoxNo(sl,2)==2)
-        &&(xdGetSpriteNoByBoxNo(sl,3)==3)
-        &&(xdGetSpriteNoByBoxNo(sl,4)==4)
-        &&(xdGetSpriteNoByBoxNo(sl,5)==5)
-        &&(xdGetSpriteNoByBoxNo(sl,6)==6)
-          &&(xdGetSpriteNoByBoxNo(sl,7)==7)){
-            s += "You Win!";
-
-
-        }
-        BitmapFont f = new BitmapFont();
-
-        f.setColor(Color.GREEN);
-        f.draw(sb,"GameM:v0.1.1 \n try audio failed!" + s,500,400);
-    }
-
-    public int xdGetSpriteNoByBoxNo(ArrayList<Sprite>Ss,int iBox){
-        int iRet = -1;
-        for(int i=0;i<Ss.size();i++){
-            float x = Ss.get(i).getX() + xdD/2;
-            float y = Gdx.graphics.getHeight() - Ss.get(i).getY() -xdD/2;
-
-            int ii = (int)((x-xdX+xdD/2)/xdD);
-            int jj = (int)((y-xdY+xdD/2)/xdD);
-            if(iBox==(jj*3+ii))
-            {
-                iRet = i;
-            }
-        }
-
-        return iRet;
     }
 
 }
