@@ -53,5 +53,6 @@ public class myJSON {
         numbers.add(new PhoneNumber("Work", "425-555-4321"));
         person.setNumbers(numbers);
         System.out.println(json.toJson(person));
+        System.out.println(json.prettyPrint(person));
     }
 }
